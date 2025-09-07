@@ -1,4 +1,3 @@
-
 #include <iostream>
 using namespace std;
 
@@ -73,7 +72,7 @@ void menu()
 void inicializar()
 {
 
-	// se a lista j� possuir elementos
+	// se a lista já possuir elementos
 	// libera a memoria ocupada
 	NO* aux = primeiro;
 	while (aux != NULL) {
@@ -115,6 +114,24 @@ void exibirElementos()
 	}
 }
 
+void buscarElemento()
+{
+	int digitado;
+
+	cout << "Digite o elemento: ";
+	cin >> digitado;
+	
+	NO* pos = posicaoElemento(digitado);
+
+	if (pos == NULL) {
+		cout << "numero não encontrado\n";
+	}
+	else {
+		cout << "Numero digitado existe na lista\n";
+	}
+}
+
+
 void inserirElemento()
 {
 	// aloca memoria dinamicamente para o novo elemento
@@ -128,9 +145,17 @@ void inserirElemento()
 	cin >> novo->valor;
 	novo->prox = NULL;
 
+	int digitado = novo->valor;
+
+	NO* pos = posicaoElemento(digitado);
+
+
 	if (primeiro == NULL)
 	{
 		primeiro = novo;
+	}
+	else if (pos) {
+		cout << "Esse elemento ja existe\n";
 	}
 	else
 	{
@@ -143,20 +168,43 @@ void inserirElemento()
 	}
 }
 
+// função para excluir um elemento na lista, utiliza dois ponteiros, um para o elemento atual e outro para o anterior, conseguindo assim executar corretamente a exclusão 
 void excluirElemento()
 {
+	int excluir;
+	NO* atual = primeiro;
+	NO* anterior = NULL;
 	
+	cout << "Por favor digite o valor que você quer excluir: \n";
+	cin >> excluir;
+	NO* pos = posicaoElemento(excluir);
+
+	if (pos == NULL)
+	{
+		cout << "o numero digitado não existe!\n";
+	}
+
+	while(atual-> valor != excluir)
+	{
+		anterior = atual;
+		atual = atual->prox;
+
+		if(atual->valor == excluir && anterior == NULL)
+		{
+			primeiro = atual -> prox;
+		}
+		else if(atual-> valor == excluir)
+		{
+			NO* aux = atual;
+			anterior->prox = atual->prox;
+			free(aux);
+
+			cout << "numero excluido com sucesso!\n";
+		}
+	}
 }
 
-void buscarElemento()
-{
-	
-}
-
-
-
-// retorna um ponteiro para o elemento buscado
-// ou NULL se o elemento n�o estiver na lista
+// busca a posição do elemento na lista - foi utilizada na função inserirElemento e excluirElemento
 NO* posicaoElemento(int numero)
 {
 	NO* aux = primeiro;
